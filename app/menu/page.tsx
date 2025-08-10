@@ -18,13 +18,7 @@ import SakuraCursor from "@/components/sakura-cursor"
 import { useCart } from "@/context/CartContext"
 
 
-type CartItem = {
-  id: string;
-  name: string;
-  quantity: number;
-  price: string;
-  image?: string;
-};
+
 
 export default function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState("tea")
@@ -101,8 +95,67 @@ export default function MenuPage() {
   }, [selectedItem, handleAddToCart])
 
   if (!menuItems || !categories) {
-    return <div className="min-h-screen flex items-center justify-center">Loading menu...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F5F2]">
+        <div className="flex flex-col items-center text-center p-4 animate-fade-in">
+          {/* The Ripple Animation Container */}
+          <div className="relative w-40 h-40 flex items-center justify-center mb-8">
+            {/* The central anchor point (replaces the image) */}
+            <div className="w-5 h-5 bg-[#465775] rounded-full shadow-inner"></div>
+            {/* Three ripple divs, each with a different animation delay to create a pulse effect */}
+            <div className="ripple" style={{ borderColor: 'rgba(70, 87, 117, 0.4)' }}></div>
+            <div className="ripple" style={{ borderColor: 'rgba(70, 87, 117, 0.4)', animationDelay: '1s' }}></div>
+            <div className="ripple" style={{ borderColor: 'rgba(70, 87, 117, 0.4)', animationDelay: '2s' }}></div>
+          </div>
+          {/* The Text Content */}
+          <h2 className="text-2xl font-light text-[#465775] mb-2 tracking-wide animate-pulse">
+            A moment of calm...
+          </h2>
+          <p className="text-[#333333] opacity-70 text-lg max-w-xs">
+            Preparing your experience while you wait.
+          </p>
+        </div>
+        {/* CSS for the animations is placed directly in the component for simplicity */}
+        <style>{`
+            @keyframes ripple-effect {
+              0% {
+                transform: scale(0.5);
+                opacity: 1;
+              }
+              100% {
+                transform: scale(2.5);
+                opacity: 0;
+              }
+            }
+            @keyframes fade-in {
+              from { 
+                opacity: 0;
+                transform: translateY(10px);
+              }
+              to { 
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+            .animate-fade-in {
+              animation: fade-in 0.8s ease-out forwards;
+            }
+            .ripple {
+              position: absolute;
+              border-width: 2px;
+              border-radius: 50%;
+              width: 100%;
+              height: 100%;
+              animation: ripple-effect 3s infinite cubic-bezier(0.215, 0.610, 0.355, 1);
+              opacity: 0;
+            }
+          `}</style>
+      </div>
+    );
   }
+
+
+
 
   return (
     <div className="min-h-screen bg-[#F8F5F2]">
