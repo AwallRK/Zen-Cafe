@@ -89,3 +89,41 @@ export async function sendOrderEmail({
     }
 }
 
+
+export async function sendContactEmail({
+    firstName,
+    lastName,
+    email,
+    subject,
+    message
+}: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    subject: string;
+    message: string;
+}) {
+    const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID_CONTACT || '';
+    const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_CONTACT || '';
+    const userID = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '';
+
+
+
+    const templateParams = {
+        firstName,
+        email,
+        subject,
+        message
+    };
+
+    try {
+        const result = await emailjs.send(serviceID, templateID, templateParams, userID);
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+
+

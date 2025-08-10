@@ -1,8 +1,4 @@
 {
-  "/api/menu-item/route": "app/api/menu-item/route.js",
-  "/api/order/route": "app/api/order/route.js",
-  "/api/category/route": "app/api/category/route.js",
-  "/page": "app/page.js",
-  "/menu/page": "app/menu/page.js",
-  "/order/page": "app/order/page.js"
+  "/contact/page": "app/contact/page.js",
+  "/page": "app/page.js"
 }

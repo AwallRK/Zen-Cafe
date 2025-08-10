@@ -8,7 +8,13 @@ import Footer from '@/components/footer'
 import SakuraCursor from '@/components/sakura-cursor'
 
 export default function ContactPage() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    subject: string;
+    message: string;
+  }>({
     firstName: '',
     lastName: '',
     email: '',
@@ -24,26 +30,26 @@ export default function ContactPage() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    setSuccess('')
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      })
-      if (res.ok) {
-        setSuccess('Message sent! We will get back to you soon.')
-        setForm({ firstName: '', lastName: '', email: '', subject: 'General Inquiry', message: '' })
-      } else {
-        setError('Failed to send message. Please try again.')
-      }
-    } catch {
-      setError('Failed to send message. Please try again.')
+      // Call sendContactEmail from lib/email.ts
+      const { sendContactEmail } = await import('@/lib/email');
+      await sendContactEmail({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        subject: form.subject,
+        message: form.message,
+      });
+      setSuccess('Message sent! We will get back to you soon.');
+      setForm({ firstName: '', lastName: '', email: '', subject: 'General Inquiry', message: '' });
+    } catch (err) {
+      setError('Failed to send message. Please try again.');
     }
-    setLoading(false)
+    setLoading(false);
   }
 
   return (
