@@ -45,6 +45,7 @@ export default function CMSDashboard() {
         .then(res => res.json())
         .then(data => setOrdersData(data))
         .catch(() => setOrdersData([]))
+
     } else if (activeTab === 'contacts') {
       fetch('/api/contact')
         .then(res => res.json())
@@ -67,6 +68,13 @@ export default function CMSDashboard() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
   // Get unique categories from menuItems
+
+  // Log ordersData whenever it changes
+  useEffect(() => {
+    if (activeTab === 'orders') {
+      console.log('ordersData:', ordersData)
+    }
+  }, [ordersData, activeTab])
   const categories = Array.from(new Set(menuItems.map(item => item.category))).filter(Boolean)
   // Filtered items by category
   const filteredItems = selectedCategory === 'all'
