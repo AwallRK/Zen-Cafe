@@ -15,6 +15,7 @@ import MenuModal from "@/components/menu/menu-modal"
 import Navigation from "@/components/navigation"
 import Pagination from "@/components/menu/menu-pagination"
 import SakuraCursor from "@/components/sakura-cursor"
+import { useCart } from "@/context/CartContext"
 
 
 type CartItem = {
@@ -28,10 +29,10 @@ type CartItem = {
 export default function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState("tea")
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
-  const [cart, setCart] = useState<CartItem[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [menuItems, setMenuItems] = useState<MenuItem[] | null>(null)
   const [categories, setCategories] = useState<Category[] | null>(null)
+  const { cart, addToCart } = useCart()
 
   useEffect(() => {
     fetch("/api/menu-item")
@@ -71,26 +72,13 @@ export default function MenuPage() {
   }, [])
 
   const handleAddToCart = useCallback((item: MenuItem) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id)
-      if (existingItem) {
-        return prevCart.map((cartItem) =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem,
-        )
-      } else {
-        return [
-          ...prevCart,
-          {
-            id: item.id,
-            name: item.name,
-            quantity: 1,
-            price: item.price,
-            image: item.image,
-          },
-        ]
-      }
+    addToCart({
+      id: item.id,
+      name: item.name,
+      quantity: 1,
+      price: item.price,
+      image: item.image,
     })
-
     toast.success(`${item.name} added to cart!`, {
       position: "top-right",
       autoClose: 2000,
@@ -99,7 +87,7 @@ export default function MenuPage() {
       pauseOnHover: true,
       draggable: true,
     })
-  }, [])
+  }, [addToCart])
 
   const handleCloseModal = useCallback(() => {
     setSelectedItem(null)

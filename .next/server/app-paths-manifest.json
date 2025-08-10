@@ -1,12 +1,10 @@
 {
-  "/api/contact/route": "app/api/contact/route.js",
-  "/api/admin/route": "app/api/admin/route.js",
   "/api/menu-item/route": "app/api/menu-item/route.js",
+  "/api/category/route": "app/api/category/route.js",
+  "/api/order/route": "app/api/order/route.js",
+  "/about/page": "app/about/page.js",
+  "/page": "app/page.js",
   "/contact/page": "app/contact/page.js",
   "/menu/page": "app/menu/page.js",
-  "/about/page": "app/about/page.js",
-  "/cms/login/page": "app/cms/login/page.js",
-  "/order/page": "app/order/page.js",
-  "/cms/dashboard/page": "app/cms/dashboard/page.js",
-  "/page": "app/page.js"
+  "/order/page": "app/order/page.js"
 }
