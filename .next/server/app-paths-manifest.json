@@ -1,4 +1,8 @@
 {
-  "/contact/page": "app/contact/page.js",
-  "/page": "app/page.js"
+  "/api/category/route": "app/api/category/route.js",
+  "/api/order/route": "app/api/order/route.js",
+  "/page": "app/page.js",
+  "/cms/dashboard/page": "app/cms/dashboard/page.js",
+  "/menu/page": "app/menu/page.js",
+  "/cms/login/page": "app/cms/login/page.js"
 }

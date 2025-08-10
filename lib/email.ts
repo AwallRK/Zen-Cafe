@@ -108,9 +108,8 @@ export async function sendContactEmail({
     const userID = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '';
 
 
-
     const templateParams = {
-        firstName,
+        name: `${firstName} ${lastName}`,
         email,
         subject,
         message

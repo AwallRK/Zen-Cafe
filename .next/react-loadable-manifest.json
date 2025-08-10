@@ -1,10 +1,4 @@
 {
-  "app/contact/page.tsx -> @/lib/email": {
-    "id": "app/contact/page.tsx -> @/lib/email",
-    "files": [
-      "static/chunks/_app-pages-browser_lib_email_ts.js"
-    ]
-  },
   "node_modules/@react-three/drei/core/VideoTexture.js -> hls.js": {
     "id": "node_modules/@react-three/drei/core/VideoTexture.js -> hls.js",
     "files": []
