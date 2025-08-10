@@ -11,7 +11,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#F8F5F2]">
       <Navigation cartItems={[]} />
-      
+
       <div className="pt-24 pb-12">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div
@@ -39,19 +39,19 @@ export default function AboutPage() {
               <div>
                 <h2 className="text-3xl font-light text-[#333333] mb-6">The Beginning</h2>
                 <p className="text-[#333333] opacity-80 leading-relaxed mb-4">
-                  Founded in 2018 by tea master Hiroshi Tanaka, 禅茶房 (Zen Café) was born from a 
-                  desire to share the profound peace found in traditional Japanese tea ceremony 
+                  Founded in 2018 by tea master Hiroshi Tanaka, 禅茶房 (Zen Café) was born from a
+                  desire to share the profound peace found in traditional Japanese tea ceremony
                   with the modern world.
                 </p>
                 <p className="text-[#333333] opacity-80 leading-relaxed">
-                  After studying tea ceremony for over two decades in Kyoto, Hiroshi envisioned 
-                  a space where the ancient art of tea could flourish alongside contemporary life, 
+                  After studying tea ceremony for over two decades in Kyoto, Hiroshi envisioned
+                  a space where the ancient art of tea could flourish alongside contemporary life,
                   creating moments of mindfulness in our busy urban existence.
                 </p>
               </div>
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
                 <Image
-                  src="/placeholder.svg?height=400&width=500"
+                  src="https://res.cloudinary.com/jnto/image/upload/w_1400,h_900,c_fill,f_auto,fl_lossy,q_60/v1/media/filer_public/3b/b0/3bb06794-34e8-495e-bc1b-9980683f7854/03_smart_coffee_atp2j8"
                   alt="Tea master preparing ceremony"
                   fill
                   className="object-cover"
@@ -68,7 +68,7 @@ export default function AboutPage() {
             >
               <div className="order-2 md:order-1 relative aspect-[4/3] rounded-2xl overflow-hidden">
                 <Image
-                  src="/placeholder.svg?height=400&width=500"
+                  src="https://media.timeout.com/images/106135475/image.jpg"
                   alt="Traditional tea garden"
                   fill
                   className="object-cover"
@@ -77,13 +77,13 @@ export default function AboutPage() {
               <div className="order-1 md:order-2">
                 <h2 className="text-3xl font-light text-[#333333] mb-6">Our Philosophy</h2>
                 <p className="text-[#333333] opacity-80 leading-relaxed mb-4">
-                  We believe that tea is more than a beverage—it is a bridge between the past 
-                  and present, a moment of connection with ourselves and others. Every cup we 
-                  serve is prepared with the same attention and respect given in traditional 
+                  We believe that tea is more than a beverage—it is a bridge between the past
+                  and present, a moment of connection with ourselves and others. Every cup we
+                  serve is prepared with the same attention and respect given in traditional
                   tea ceremonies.
                 </p>
                 <p className="text-[#333333] opacity-80 leading-relaxed">
-                  Our space is designed to slow down time, to create a sanctuary where guests 
+                  Our space is designed to slow down time, to create a sanctuary where guests
                   can experience the meditative quality of tea and the gentle art of being present.
                 </p>
               </div>
@@ -99,9 +99,9 @@ export default function AboutPage() {
               {/* Background decorative elements */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#FFE0E0] rounded-full opacity-20 -translate-y-16 translate-x-16"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#465775] rounded-full opacity-10 translate-y-12 -translate-x-12"></div>
-              
+
               <div className="relative z-10">
-                <motion.h2 
+                <motion.h2
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
@@ -119,7 +119,7 @@ export default function AboutPage() {
                 >
                   Three pillars that guide our journey in creating moments of tranquility
                 </motion.p>
-                
+
                 <div className="grid md:grid-cols-3 gap-8">
                   <motion.div
                     initial={{ opacity: 0, y: 50 }}
@@ -136,13 +136,13 @@ export default function AboutPage() {
                         Sustainability
                       </h3>
                       <p className="text-[#333333] opacity-80 leading-relaxed mb-4">
-                        We source our tea directly from organic farms in Japan, supporting 
+                        We source our tea directly from organic farms in Japan, supporting
                         sustainable farming practices and fair trade partnerships.
                       </p>
                       <div className="w-full h-1 bg-gradient-to-r from-[#465775] to-transparent rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-300"></div>
                     </div>
                   </motion.div>
-                  
+
                   <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -158,13 +158,13 @@ export default function AboutPage() {
                         Tradition
                       </h3>
                       <p className="text-[#333333] opacity-80 leading-relaxed mb-4">
-                        Every aspect of our service honors traditional Japanese tea culture 
+                        Every aspect of our service honors traditional Japanese tea culture
                         while embracing modern accessibility and contemporary needs.
                       </p>
                       <div className="w-full h-1 bg-gradient-to-r from-[#465775] to-transparent rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-300"></div>
                     </div>
                   </motion.div>
-                  
+
                   <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -180,7 +180,7 @@ export default function AboutPage() {
                         Community
                       </h3>
                       <p className="text-[#333333] opacity-80 leading-relaxed mb-4">
-                        We host tea ceremonies, workshops, and cultural events to share 
+                        We host tea ceremonies, workshops, and cultural events to share
                         the beauty of Japanese tea culture with our growing community.
                       </p>
                       <div className="w-full h-1 bg-gradient-to-r from-[#465775] to-transparent rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-300"></div>
@@ -199,8 +199,8 @@ export default function AboutPage() {
             >
               <h2 className="text-3xl font-light text-[#333333] mb-6">Visit Us</h2>
               <p className="text-[#333333] opacity-80 leading-relaxed mb-8 max-w-2xl mx-auto">
-                We invite you to experience the tranquility of our space, to taste teas 
-                that have been carefully selected and prepared with mindfulness, and to 
+                We invite you to experience the tranquility of our space, to taste teas
+                that have been carefully selected and prepared with mindfulness, and to
                 discover moments of peace in your day.
               </p>
               <Link href="/contact">
@@ -212,10 +212,10 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Footer */}
       <Footer />
-      
+
       {/* Sakura Cursor */}
       <SakuraCursor />
     </div>
