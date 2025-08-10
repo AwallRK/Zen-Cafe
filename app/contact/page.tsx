@@ -8,10 +8,48 @@ import Footer from '@/components/footer'
 import SakuraCursor from '@/components/sakura-cursor'
 
 export default function ContactPage() {
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    subject: 'General Inquiry',
+    message: ''
+  })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState('')
+  const [error, setError] = useState('')
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    setSuccess('')
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      })
+      if (res.ok) {
+        setSuccess('Message sent! We will get back to you soon.')
+        setForm({ firstName: '', lastName: '', email: '', subject: 'General Inquiry', message: '' })
+      } else {
+        setError('Failed to send message. Please try again.')
+      }
+    } catch {
+      setError('Failed to send message. Please try again.')
+    }
+    setLoading(false)
+  }
+
   return (
     <div className="min-h-screen bg-[#F8F5F2]">
       <Navigation cartItems={[]} />
-      
+
       <div className="pt-24 pb-12">
         <div className="max-w-6xl mx-auto px-6">
           <motion.div
@@ -40,7 +78,7 @@ export default function ContactPage() {
                 {/* Contact Information Card */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg">
                   <h2 className="text-2xl font-light text-[#333333] mb-6">Contact Information</h2>
-                  
+
                   <div className="space-y-6">
                     <div className="flex items-start space-x-4">
                       <MapPin className="text-[#465775] mt-1" size={20} />
@@ -52,7 +90,7 @@ export default function ContactPage() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start space-x-4">
                       <Phone className="text-[#465775] mt-1" size={20} />
                       <div>
@@ -60,7 +98,7 @@ export default function ContactPage() {
                         <p className="text-[#333333] opacity-80 text-sm">+81 3-1234-5678</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start space-x-4">
                       <Mail className="text-[#465775] mt-1" size={20} />
                       <div>
@@ -74,7 +112,7 @@ export default function ContactPage() {
                 {/* Opening Hours Card */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg">
                   <h2 className="text-2xl font-light text-[#333333] mb-6">Opening Hours</h2>
-                  
+
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-[#333333]">Monday - Friday</span>
@@ -89,7 +127,7 @@ export default function ContactPage() {
                       <span className="text-[#333333] opacity-80">9:00 AM - 8:00 PM</span>
                     </div>
                   </div>
-                  
+
                   <div className="mt-6 p-4 bg-[#FFE0E0] rounded-lg">
                     <p className="text-[#333333] text-sm">
                       <strong>Tea Ceremony Sessions:</strong><br />
@@ -101,7 +139,7 @@ export default function ContactPage() {
                 {/* Getting Here Card */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg flex-1">
                   <h2 className="text-2xl font-light text-[#333333] mb-6">Getting Here</h2>
-                  
+
                   <div className="space-y-4 text-sm text-[#333333] opacity-80">
                     <div>
                       <strong className="text-[#333333]">By Train:</strong><br />
@@ -116,7 +154,7 @@ export default function ContactPage() {
                       Limited street parking available. We recommend using public transportation.
                     </div>
                   </div>
-                  
+
                   {/* Additional info to balance height */}
                   <div className="mt-6 p-4 bg-[#EAE7E3] rounded-lg">
                     <h4 className="font-medium text-[#333333] mb-2">Nearby Landmarks</h4>
@@ -152,7 +190,7 @@ export default function ContactPage() {
                       referrerPolicy="no-referrer-when-downgrade"
                       className="rounded-2xl"
                     />
-                    
+
                     {/* Map overlay with cafe info */}
                     <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg max-w-xs">
                       <div className="flex items-center space-x-3 mb-2">
@@ -194,8 +232,8 @@ export default function ContactPage() {
                 {/* Contact Form - Made to fill remaining space */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg flex-1 flex flex-col">
                   <h2 className="text-2xl font-light text-[#333333] mb-6">Send us a Message</h2>
-                  
-                  <form className="flex-1 flex flex-col space-y-6">
+
+                  <form className="flex-1 flex flex-col space-y-6" onSubmit={handleSubmit}>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-[#333333] mb-2">
@@ -203,8 +241,12 @@ export default function ContactPage() {
                         </label>
                         <input
                           type="text"
+                          name="firstName"
+                          value={form.firstName}
+                          onChange={handleChange}
                           className="w-full px-4 py-3 border border-[#D3D3D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#465775] focus:border-transparent"
                           placeholder="Your first name"
+                          required
                         />
                       </div>
                       <div>
@@ -213,28 +255,40 @@ export default function ContactPage() {
                         </label>
                         <input
                           type="text"
+                          name="lastName"
+                          value={form.lastName}
+                          onChange={handleChange}
                           className="w-full px-4 py-3 border border-[#D3D3D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#465775] focus:border-transparent"
                           placeholder="Your last name"
+                          required
                         />
                       </div>
                     </div>
-                    
                     <div>
                       <label className="block text-sm font-medium text-[#333333] mb-2">
                         Email
                       </label>
                       <input
                         type="email"
+                        name="email"
+                        value={form.email}
+                        onChange={handleChange}
                         className="w-full px-4 py-3 border border-[#D3D3D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#465775] focus:border-transparent"
                         placeholder="your.email@example.com"
+                        required
                       />
                     </div>
-                    
                     <div>
                       <label className="block text-sm font-medium text-[#333333] mb-2">
                         Subject
                       </label>
-                      <select className="w-full px-4 py-3 border border-[#D3D3D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#465775] focus:border-transparent">
+                      <select
+                        name="subject"
+                        value={form.subject}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-[#D3D3D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#465775] focus:border-transparent"
+                        required
+                      >
                         <option>General Inquiry</option>
                         <option>Tea Ceremony Booking</option>
                         <option>Private Event</option>
@@ -242,22 +296,27 @@ export default function ContactPage() {
                         <option>Other</option>
                       </select>
                     </div>
-                    
                     <div className="flex-1 flex flex-col">
                       <label className="block text-sm font-medium text-[#333333] mb-2">
                         Message
                       </label>
                       <textarea
+                        name="message"
+                        value={form.message}
+                        onChange={handleChange}
                         className="w-full flex-1 min-h-[120px] px-4 py-3 border border-[#D3D3D3] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#465775] focus:border-transparent resize-none"
                         placeholder="Tell us how we can help you..."
+                        required
                       />
                     </div>
-                    
+                    {success && <div className="text-green-600 text-sm">{success}</div>}
+                    {error && <div className="text-red-600 text-sm">{error}</div>}
                     <button
                       type="submit"
                       className="w-full bg-[#465775] text-white py-4 rounded-full hover:bg-[#465775]/90 transition-colors duration-300"
+                      disabled={loading}
                     >
-                      Send Message
+                      {loading ? 'Sending...' : 'Send Message'}
                     </button>
                   </form>
                 </div>
@@ -266,10 +325,10 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Footer */}
       <Footer />
-      
+
       {/* Sakura Cursor */}
       <SakuraCursor />
     </div>
