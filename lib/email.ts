@@ -16,13 +16,14 @@ export async function sendOrderEmail({
     shipping_city,
     shipping_prefecture,
     shipping_postal,
-    orderType
+    orderType,
+    email
 }: {
     customer_name: string
     customer_email: string
     order_id: string
     order_date: string
-    order_items: Array<{ name: string; quantity: number; price_formatted: string }>
+    order_items: Array<{ name: string; quantity: number; price: number }>
     subtotal_formatted: string
     shipping_formatted: string
     total_formatted: string
@@ -31,12 +32,16 @@ export async function sendOrderEmail({
     shipping_city: string
     shipping_prefecture: string
     shipping_postal: string
-    orderType: 'pickup' | 'delivery'
+    orderType: 'pickup' | 'delivery',
+    email: string
 }) {
-    const serviceID = process.env.EMAILJS_SERVICE_ID_ORDER || ''
-    const templateID = process.env.EMAILJS_TEMPLATE_ID_ORDER || ''
-    const userID = process.env.EMAILJS_PUBLIC_KEY || ''
+    const serviceID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID_ORDER || ''
+    const templateID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_ORDER || ''
+    const userID = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ''
 
+    console.log('EmailJS User ID:', userID)
+    console.log('EmailJS Service ID:', serviceID)
+    console.log('EmailJS Template ID:', templateID)
     // Generate HTML for order items
     let orderItemsHtml = ''
     order_items.forEach(item => {
@@ -46,7 +51,7 @@ export async function sendOrderEmail({
                 ${item.name} (x${item.quantity})
             </td>
             <td style="text-align: right; padding: 12px; border-bottom: 1px solid #dcd8c4;">
-                ${item.price_formatted}
+                ${item.price}
             </td>
         </tr>
         `
@@ -71,10 +76,12 @@ export async function sendOrderEmail({
         total_formatted,
         shipping_address_line_1: addressLine1,
         shipping_address_line_2: addressLine2,
-        shipping_city_postal: cityPostalFinal
+        shipping_city_postal: cityPostalFinal,
+        email: customer_email
     }
 
     try {
+
         const result = await emailjs.send(serviceID, templateID, templateParams, userID)
         return result
     } catch (err) {

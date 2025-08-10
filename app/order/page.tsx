@@ -4,6 +4,7 @@ import OrderTypeSelector from '@/components/order/OrderTypeSelector';
 import CartItems from '@/components/order/CartItems';
 import CustomerForm from '@/components/order/CustomerForm';
 import OrderSummary from '@/components/order/OrderSummary';
+import { sendOrderEmail } from '@/lib/email';
 
 declare global {
   interface Window {
@@ -83,6 +84,10 @@ export default function OrderPage() {
         prefecture?: string;
         postalCode?: string;
       };
+      subtotal: number;
+      tax: number;
+      total: number;
+      deliveryFee?: number;
     };
 
     const orderData: OrderData = {
@@ -102,6 +107,10 @@ export default function OrderPage() {
         prefecture: form.prefecture,
         postalCode: form.postalCode,
       },
+      ...(orderType === 'delivery' ? { deliveryFee } : {}),
+      subtotal,
+      tax,
+      total,
     };
 
     try {
@@ -127,6 +136,31 @@ export default function OrderPage() {
           body: JSON.stringify(orderData),
         });
         if (res.ok) {
+          // Send order confirmation email
+          try {
+            await sendOrderEmail({
+              customer_name: `${form.firstName} ${form.lastName}`,
+              customer_email: form.email,
+              order_id: (await res.json())._id || '',
+              order_date: new Date().toLocaleString(),
+              order_items: cart.map(item => ({
+                name: item.name,
+                quantity: item.quantity,
+                price: typeof item.price === 'string' ? parseInt(item.price.replace(/[^\d]/g, ''), 10) : Number(item.price) || 0,
+              })),
+              subtotal_formatted: `¥${subtotal.toLocaleString()}`,
+              shipping_formatted: orderType === 'delivery' ? `¥${deliveryFee.toLocaleString()}` : 'Pickup',
+              total_formatted: `¥${total.toLocaleString()}`,
+              shipping_address_line_1: form.streetAddress,
+              shipping_address_line_2: '',
+              shipping_city: form.city,
+              shipping_prefecture: form.prefecture,
+              shipping_postal: form.postalCode,
+              orderType,
+            });
+          } catch (err) {
+            console.error('Email send error:', err);
+          }
           setSuccess("Order placed successfully!");
           clearCart();
           setForm({
