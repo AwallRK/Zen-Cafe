@@ -1,11 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/api/menu-item/route": "app/api/menu-item/route.js",
+  "/api/order/route": "app/api/order/route.js",
   "/api/category/route": "app/api/category/route.js",
-  "/api/create-checkout-session/route": "app/api/create-checkout-session/route.js",
-  "/order/page": "app/order/page.js",
-  "/menu/page": "app/menu/page.js",
   "/page": "app/page.js",
-  "/about/page": "app/about/page.js",
-  "/contact/page": "app/contact/page.js"
+  "/menu/page": "app/menu/page.js",
+  "/order/page": "app/order/page.js"
 }
