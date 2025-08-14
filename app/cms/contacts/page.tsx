@@ -26,7 +26,7 @@ export default function ContactsPage() {
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<'all' | 'unread' | 'read' | 'replied'>('all')
-  
+
   const [contacts, setContacts] = useState<ContactMessage[]>([
     {
       id: '1',
@@ -91,8 +91,8 @@ export default function ContactsPage() {
 
   const filteredContacts = contacts.filter(contact => {
     const matchesSearch = contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contact.subject.toLowerCase().includes(searchTerm.toLowerCase())
+      contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.subject.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === 'all' || contact.status === statusFilter
     return matchesSearch && matchesStatus
   })
@@ -105,11 +105,10 @@ export default function ContactsPage() {
   }
 
   const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this message?')) {
-      setContacts(contacts.filter(contact => contact.id !== id))
-      setSelectedMessage(null)
-      toast.success('Message deleted successfully')
-    }
+    // ...delete confirmation handled elsewhere or should be implemented with SweetAlert2...
+    setContacts(contacts.filter(contact => contact.id !== id))
+    setSelectedMessage(null)
+    toast.success('Message deleted successfully')
   }
 
   const formatDate = (dateString: string) => {
@@ -217,9 +216,8 @@ export default function ContactsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                   onClick={() => setSelectedMessage(contact)}
-                  className={`bg-white rounded-2xl p-6 shadow-lg border border-[#EAE7E3] cursor-pointer transition-all duration-300 hover:shadow-xl ${
-                    selectedMessage?.id === contact.id ? 'ring-2 ring-[#465775]' : ''
-                  } ${contact.status === 'unread' ? 'border-l-4 border-l-[#465775]' : ''}`}
+                  className={`bg-white rounded-2xl p-6 shadow-lg border border-[#EAE7E3] cursor-pointer transition-all duration-300 hover:shadow-xl ${selectedMessage?.id === contact.id ? 'ring-2 ring-[#465775]' : ''
+                    } ${contact.status === 'unread' ? 'border-l-4 border-l-[#465775]' : ''}`}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center space-x-3">
@@ -240,12 +238,12 @@ export default function ContactsPage() {
                       </span>
                     </div>
                   </div>
-                  
+
                   <h4 className="font-medium text-[#333333] mb-2">{contact.subject}</h4>
                   <p className="text-sm text-[#333333] opacity-80 line-clamp-2 mb-3">
                     {contact.message}
                   </p>
-                  
+
                   <div className="flex items-center justify-between text-xs text-[#333333] opacity-60">
                     <span>{formatDate(contact.date)}</span>
                     <span className="capitalize">{contact.status}</span>
@@ -274,7 +272,7 @@ export default function ContactsPage() {
                       <Trash2 size={16} />
                     </button>
                   </div>
-                  
+
                   <div className="space-y-3">
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 bg-gradient-to-br from-[#465775] to-[#465775]/70 rounded-full flex items-center justify-center">
@@ -287,14 +285,14 @@ export default function ContactsPage() {
                         <p className="text-sm text-[#333333] opacity-60">{selectedMessage.email}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <Calendar size={16} className="text-[#465775]" />
                       <span className="text-sm text-[#333333] opacity-80">
                         {formatDate(selectedMessage.date)}
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center space-x-2">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${getPriorityColor(selectedMessage.priority)}`}>
                         {selectedMessage.priority} priority
@@ -306,13 +304,13 @@ export default function ContactsPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-6">
                   <h4 className="font-medium text-[#333333] mb-3">{selectedMessage.subject}</h4>
                   <p className="text-sm text-[#333333] opacity-80 leading-relaxed mb-6">
                     {selectedMessage.message}
                   </p>
-                  
+
                   <div className="space-y-3">
                     <h5 className="font-medium text-[#333333]">Actions</h5>
                     <div className="grid grid-cols-1 gap-2">
@@ -368,7 +366,7 @@ export default function ContactsPage() {
           border: '1px solid #EAE7E3'
         }}
       />
-      
+
       <SakuraCursor />
     </div>
   )

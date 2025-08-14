@@ -18,7 +18,7 @@ interface MenuItem {
 interface ItemFormProps {
     mode: string
     formData: MenuItem
-    categories: { value: string; label: string }[]
+    categories: { value: string; label: string, id: string }[]
     imagePreview: string
     isLoading: boolean
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void
@@ -99,7 +99,7 @@ export function ItemForm({
                             required
                         >
                             {categories.map(category => (
-                                <option key={category.value} value={category.value}>
+                                <option key={category.value} value={category.id}>
                                     {category.label}
                                 </option>
                             ))}

@@ -1,4 +1,5 @@
 import React from 'react'
+import Swal from 'sweetalert2'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { Plus, Edit, Trash2 } from 'lucide-react'
@@ -35,6 +36,24 @@ export default function MenuTable({
     handleDeleteItem,
     toggleItemStatus
 }: Props) {
+    // Confirm delete handler
+    const confirmDelete = (id: string) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleDeleteItem(id)
+            }
+        })
+    }
+
     return (
         <>
             <div className="p-6 border-b border-[#EAE7E3]">
@@ -116,7 +135,7 @@ export default function MenuTable({
                                             </button>
                                         </Link>
                                         <button
-                                            onClick={() => handleDeleteItem(item.id)}
+                                            onClick={() => confirmDelete(item.id)}
                                             className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-300"
                                         >
                                             <Trash2 size={16} />

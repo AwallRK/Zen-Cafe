@@ -125,20 +125,19 @@ export default function CMSDashboard() {
   }
 
   const handleDeleteItem = async (id: string) => {
-    if (confirm('Are you sure you want to delete this item?')) {
-      const token = localStorage.getItem('cms_auth_token')
-      const res = await fetch(`/api/menu-item?id=${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      if (res.ok) {
-        setMenuItems(menuItems.filter(item => item.id !== id))
-        toast.success('Item deleted successfully')
-      } else {
-        toast.error('Failed to delete item')
+    // Confirmation handled by SweetAlert2 in MenuTable
+    const token = localStorage.getItem('cms_auth_token')
+    const res = await fetch(`/api/menu-item?id=${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
+    })
+    if (res.ok) {
+      setMenuItems(menuItems.filter(item => item.id !== id))
+      toast.success('Item deleted successfully')
+    } else {
+      toast.error('Failed to delete item')
     }
   }
 
@@ -175,34 +174,46 @@ export default function CMSDashboard() {
     )
   }
 
+  // Calculate stats dynamically
+  const totalMenuItems = menuItems.length
+  const activeMenuItems = menuItems.filter(item => item.status === 'active').length
+  const totalContacts = contactsData.length
+  const unreadContacts = contactsData.filter((c: any) => !c.read).length
+  const today = new Date().toISOString().slice(0, 10)
+  const ordersToday = ordersData.filter((order: any) => {
+    if (!order.createdAt) return false
+    const orderDate = new Date(order.createdAt).toISOString().slice(0, 10)
+    return orderDate === today
+  }).length
+  // Optionally, you can calculate change values if you have historical data
   const stats = [
     {
       title: 'Total Menu Items',
-      value: menuItems.length,
+      value: totalMenuItems,
       icon: Coffee,
       color: 'from-blue-500 to-blue-600',
-      change: '+2 this week'
+      change: ''
     },
     {
       title: 'Active Items',
-      value: menuItems.filter(item => item.status === 'active').length,
+      value: activeMenuItems,
       icon: TrendingUp,
       color: 'from-green-500 to-green-600',
-      change: '+5% from last month'
+      change: ''
     },
     {
       title: 'Contact Messages',
-      value: 12,
+      value: totalContacts,
       icon: MessageSquare,
       color: 'from-purple-500 to-purple-600',
-      change: '3 unread'
+      change: unreadContacts > 0 ? `${unreadContacts} unread` : ''
     },
     {
       title: 'Orders Today',
-      value: 28,
+      value: ordersToday,
       icon: ShoppingBag,
       color: 'from-orange-500 to-orange-600',
-      change: '+12% from yesterday'
+      change: ''
     }
   ]
 
