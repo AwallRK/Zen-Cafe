@@ -1,24 +1,24 @@
 # Zen Cafe CMS Dashboard
 
-A modern, full-stack CMS dashboard for managing a Japanese cafe menu, categories, orders, reviews, and contacts. Built with Next.js, React, MongoDB, and a rich UI component library.
+A modern, full-stack CMS dashboard for managing a Japanese cafe’s menu, categories, orders, reviews, and contacts. Built with Next.js, React, MongoDB, and a rich UI component library.
 
 ---
 
 ## ✨ Features
 
-- Stripe payment gateway integration for secure online payments
-- Customer details are captured and stored with each order
-- Fancy animated loading screens for menu and order pages
-- Modular dashboard for menu, categories, orders, reviews, contacts
-- CRUD actions for all entities
+- Secure Stripe payment gateway integration
+- Automatic customer detail capture with each order
+- Animated loading screens for menu and order pages
+- Modular dashboard: menu, categories, orders, reviews, contacts
+- Full CRUD for all entities
 - Custom category icons (emoji support)
 - Authentication and protected routes
-- Pagination, filtering, and tab-based navigation
+- Pagination, filtering, and tab navigation
 - Toastify and SweetAlert2 notifications
 - REST API backend with Mongoose models
 - Migration and seeding scripts
 - Responsive, minimalist design with Tailwind CSS
-- Framer Motion animations for smooth UI transitions
+- Framer Motion for smooth UI transitions
 - Lucide and Geist icons for a beautiful interface
 - Mobile-friendly and accessible
 
@@ -39,9 +39,9 @@ A modern, full-stack CMS dashboard for managing a Japanese cafe menu, categories
 ![Toastify](https://img.shields.io/badge/toastify-FF9800?style=for-the-badge&logo=react&logoColor=white)
 ![SweetAlert2](https://img.shields.io/badge/sweetalert2-FF4081?style=for-the-badge&logo=sweetalert2&logoColor=white)
 
-**Frontend:** Next.js 15, React 19, Tailwind CSS, Framer Motion, Lucide Icons, Toastify, SweetAlert2
-**Backend:** Node.js, MongoDB, Mongoose, Stripe
-**UI Components:** Radix UI, Geist, Embla Carousel, Recharts
+**Frontend:** Next.js 15, React 19, Tailwind CSS, Framer Motion, Lucide Icons, Toastify, SweetAlert2  
+**Backend:** Node.js, MongoDB, Mongoose, Stripe  
+**UI Components:** Radix UI, Geist, Embla Carousel, Recharts  
 **Other:** Zod validation, bcryptjs, dotenv, multer, emailjs-com
 
 ---
@@ -62,7 +62,7 @@ pnpm install
 
 ### Environment Setup
 
-Create a `.env` file based on `.env.example` and configure your MongoDB URI, Stripe keys, and other secrets.
+Copy `.env.example` to `.env` and configure your MongoDB URI, Stripe keys, and other secrets.
 
 ### Running Locally
 
@@ -88,17 +88,19 @@ pnpm run seed
 
 ## 📁 Folder Structure
 
-- `app/` - Next.js app router, pages, and API routes
-- `components/` - UI and dashboard components
-- `models/` - Mongoose schemas
-- `data/` - Seed data
-- `config/` - Auth, database, email config
-- `scripts/` - Migration and seeding scripts
-- `public/` - Static assets
-- `styles/` - Global styles
-- `types/` - TypeScript types
-
----
+- `app/` — Next.js App Router, pages, API routes
+- `components/` — Reusable UI and dashboard components
+- `context/` — React context providers
+- `lib/` — Utility functions, helpers, and shared logic
+- `models/` — Mongoose schemas and database models
+- `hooks/` — Custom React hooks
+- `data/` — Static and seed data
+- `config/` — Configuration files (auth, database, email, Stripe)
+- `scripts/` — Migration and seeding scripts
+- `public/` — Static assets (images, icons, etc.)
+- `styles/` — Global and component styles (Tailwind, CSS)
+- `types/` — TypeScript type definitions and interfaces
+- `middleware/` — Custom Next.js middleware (auth, logging, etc.)
 
 ## 📝 Scripts
 
@@ -111,13 +113,13 @@ pnpm run seed
 
 ## 💡 Tips & Customization
 
-- Stripe payment integration is ready to use—just add your keys to `.env.local`.
-- Customer details are automatically saved with every order for better order management.
-- You can easily add new categories with custom emoji icons.
-- All dashboard tables support quick actions and auto-refresh after changes.
+- Add your Stripe keys to `.env.local` to enable payments.
+- Customer details are saved with every order for better management.
+- Add new categories with custom emoji icons.
+- Dashboard tables support quick actions and auto-refresh.
 - Authentication is required for all CMS routes.
 - Easily extend models and API endpoints for new features.
-- The UI is fully customizable with Tailwind CSS and Radix UI primitives.
+- UI is fully customizable with Tailwind CSS and Radix UI.
 
 ---
 
