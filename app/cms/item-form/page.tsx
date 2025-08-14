@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import SakuraCursor from '@/components/sakura-cursor'
+import { Skeleton } from '@/components/ui/skeleton'
 import { ItemForm, ItemPreview } from '@/components/cms/ItemFormComponents'
 
 interface MenuItem {
@@ -42,12 +43,28 @@ function ItemFormPageInner() {
     status: 'active'
   })
 
-  const categories = [
-    { value: 'tea', label: 'Tea & Beverages' },
-    { value: 'sweets', label: 'Traditional Sweets' },
-    { value: 'light', label: 'Light Meals' },
-    { value: 'seasonal', label: 'Seasonal Specials' }
-  ]
+  const [categories, setCategories] = useState<{ value: string; label: string; id: string }[]>([])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/category')
+        const data = await res.json()
+        if (Array.isArray(data)) {
+          setCategories(
+            data.map((cat: any) => ({
+              value: cat.value || cat._id || cat.name,
+              id: String(cat.id || cat._id || cat.value || cat.name),
+              label: cat.label || cat.name
+            }))
+          )
+        }
+      } catch (err) {
+        setCategories([])
+      }
+    }
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     const token = localStorage.getItem('cms_auth_token')
@@ -58,37 +75,37 @@ function ItemFormPageInner() {
     }
   }, [router])
 
+  const [isDataLoading, setIsDataLoading] = useState(false)
   useEffect(() => {
-    if (mode === 'edit' && itemId) {
-      // Simulate loading existing item data
-      const existingItems: { [key: string]: MenuItem } = {
-        '1': {
-          id: '1',
-          name: 'Ceremonial Matcha',
-          description: 'Premium grade matcha whisked to perfection',
-          price: '800',
-          category: 'tea',
-          ingredients: ['Ceremonial grade matcha', 'Filtered water', 'Traditional bamboo whisk preparation'],
-          image: '/ceremonial-matcha-bowl.png',
-          status: 'active'
-        },
-        '2': {
-          id: '2',
-          name: 'Hojicha Latte',
-          description: 'Roasted green tea with steamed milk',
-          price: '650',
-          category: 'tea',
-          ingredients: ['Hojicha tea', 'Steamed milk', 'Natural sweetener'],
-          image: '/placeholder-7cfap.png',
-          status: 'active'
+    const fetchMenuItem = async () => {
+      if (mode === 'edit' && itemId) {
+        setIsDataLoading(true)
+        try {
+          const res = await fetch(`/api/menu-item?id=${itemId}`)
+          const data = await res.json()
+          if (res.ok && data) {
+            setFormData({
+              id: data._id || data.id,
+              name: data.name || '',
+              description: data.description || '',
+              price: data.price ? String(data.price).replace(/^¥/, '') : '',
+              category: data.category || '',
+              ingredients: Array.isArray(data.ingredients) && data.ingredients.length > 0 ? data.ingredients : [''],
+              image: data.image || '',
+              status: data.status || 'active',
+            })
+            setImagePreview(data.image || '')
+          } else {
+            toast.error('Failed to fetch menu item data')
+          }
+        } catch (err) {
+          toast.error('Failed to fetch menu item data')
+        } finally {
+          setIsDataLoading(false)
         }
       }
-
-      if (existingItems[itemId]) {
-        setFormData(existingItems[itemId])
-        setImagePreview(existingItems[itemId].image)
-      }
     }
+    fetchMenuItem()
   }, [mode, itemId])
 
   const handleInputChange = (
@@ -142,27 +159,42 @@ function ItemFormPageInner() {
     target: FileReader & { result: string | ArrayBuffer | null }
   }
 
-  const handleImageUpload = (e: ImageUploadEvent) => {
+  const handleImageUpload = async (e: ImageUploadEvent) => {
     const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        const result = (e.target && (e.target as FileReader).result) || ''
-        if (typeof result === 'string') {
-          setImagePreview(result)
-          setFormData(prev => ({
-            ...prev,
-            image: result
-          }))
-        } else {
-          setImagePreview('')
-          setFormData(prev => ({
-            ...prev,
-            image: ''
-          }))
-        }
+    if (!file) return
+    setIsLoading(true)
+    const formDataObj = new FormData()
+    formDataObj.append('file', file)
+    try {
+      const res = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formDataObj,
+      })
+      const data = await res.json()
+      if (res.ok && data.url) {
+        setImagePreview(data.url)
+        setFormData(prev => ({
+          ...prev,
+          image: data.url
+        }))
+        toast.success('Image uploaded!')
+      } else {
+        setImagePreview('')
+        setFormData(prev => ({
+          ...prev,
+          image: ''
+        }))
+        toast.error(data.error || 'Image upload failed')
       }
-      reader.readAsDataURL(file)
+    } catch (err) {
+      setImagePreview('')
+      setFormData(prev => ({
+        ...prev,
+        image: ''
+      }))
+      toast.error('Image upload failed')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -177,24 +209,76 @@ function ItemFormPageInner() {
       return
     }
 
-    // Simulate API call
-    setTimeout(() => {
-      if (mode === 'edit') {
-        toast.success('Menu item updated successfully!')
+
+    let price = formData.price
+    if (!String(formData.price).startsWith('¥')) {
+      price = `¥${formData.price}`
+    }
+    const submitData = { ...formData, price }
+
+    try {
+      let res, data
+      if (mode === 'edit' && itemId) {
+        res = await fetch(`/api/menu-item?id=${itemId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(submitData),
+        })
+        data = await res.json()
+        if (res.ok) {
+          toast.success('Menu item updated successfully!')
+        } else {
+          toast.error(data.error || 'Failed to update menu item')
+        }
       } else {
-        toast.success('Menu item created successfully!')
+        res = await fetch('/api/menu-item', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(submitData),
+        })
+        data = await res.json()
+        if (res.ok) {
+          toast.success('Menu item created successfully!')
+        } else {
+          toast.error(data.error || 'Failed to create menu item')
+        }
       }
+      if (res.ok) {
+        setTimeout(() => {
+          router.push('/cms/dashboard')
+        }, 1500)
+      }
+    } catch (err) {
+      toast.error('An error occurred while saving the menu item')
+    } finally {
       setIsLoading(false)
-      setTimeout(() => {
-        router.push('/cms/dashboard')
-      }, 1500)
-    }, 1000)
+    }
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || isDataLoading) {
     return (
       <div className="min-h-screen bg-[#F8F5F2] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#465775]/30 border-t-[#465775] rounded-full animate-spin"></div>
+        <div className="w-full max-w-4xl px-6 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Form Skeleton */}
+            <div className="lg:col-span-2 space-y-6">
+              <Skeleton className="h-8 w-1/2 mb-4" />
+              <Skeleton className="h-16 w-full mb-4" />
+              <Skeleton className="h-16 w-full mb-4" />
+              <Skeleton className="h-32 w-full mb-4" />
+              <Skeleton className="h-10 w-1/3 mb-4" />
+              <Skeleton className="h-12 w-1/2 mb-4" />
+              <Skeleton className="h-12 w-1/2" />
+            </div>
+            {/* Preview Skeleton */}
+            <div className="lg:col-span-1 space-y-4">
+              <Skeleton className="h-64 w-full mb-4" />
+              <Skeleton className="h-8 w-3/4 mb-2" />
+              <Skeleton className="h-6 w-1/2 mb-2" />
+              <Skeleton className="h-6 w-1/3" />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
